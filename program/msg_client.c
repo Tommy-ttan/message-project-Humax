@@ -14,9 +14,18 @@
 #define EXIT_STRING             ":q"
 #define INPUT_BUFFER_SIZE       255
 
+/*
+char g_buffer_length: global var
+char _buffer_length: local var in function
+char *p_linked_list: pointer 
+int checkValidInputMessage(char *);  function
+
+*/
+
 char input_buf[INPUT_BUFFER_SIZE] = "";
 pthread_t thread_recv, thread_insert_msg;
 int thread_recv_id;
+
 
 
 char getch(void);                               //get character from stdin
@@ -132,11 +141,14 @@ void *threadRecvMessageFunc(void *arg)
 
 int main()
 {
-        printf("\nWELCOME TO HUMAX CHAT ROOM\n\n\n\n");
+        printf("--- HUMAX CHAT APP ----");
+        
+
+        printf("\n---- WELCOME TO HUMAX CHAT ROOM ----\n\n\n\n");
         insertNewMessage("");
 
         //recv msg thread
-        thread_recv_id = pthread_create(&thread_recv, NULL, threadRecvMessageFunc, NULL);
+        //thread_recv_id = pthread_create(&thread_recv, NULL, threadRecvMessageFunc, NULL);
 
         //insert input message
         while(1)

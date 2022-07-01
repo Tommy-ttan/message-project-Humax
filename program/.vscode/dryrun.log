@@ -1,0 +1,7 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/kynl/projects/message-project-Humax/program'
+ 
+gcc -o msg_client msg_client.c -pthread
+ 
+make: Leaving directory '/home/kynl/projects/message-project-Humax/program'
+ 
