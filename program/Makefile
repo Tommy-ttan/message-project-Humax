@@ -1,8 +1,7 @@
 CC=gcc
-CFLAGS=-c -Walls
+CFLAGS=-c -Wall
 
-all: msg_client
+all: msg_client 
 
 msg_client: msg_client.c 
-	$(CC) $(CFLAGS) -o msg_client msg_client.c -pthread
-
+	$(CC) -o msg_client msg_client.c -pthread
