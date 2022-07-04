@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jul  1 17:08:28 2022
+# Make data base, printed on Mon Jul  4 10:58:22 2022
 
 # Variables
 
@@ -81,7 +81,7 @@ GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-SESSION_MANAGER = local/kynl-VirtualBox:@/tmp/.ICE-unix/1294,unix/kynl-VirtualBox:/tmp/.ICE-unix/1294
+SESSION_MANAGER = local/kynl-VirtualBox:@/tmp/.ICE-unix/1907,unix/kynl-VirtualBox:/tmp/.ICE-unix/1907
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -101,7 +101,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 3936
+GIO_LAUNCHED_DESKTOP_FILE_PID = 2454
 # automatic
 %F = $(notdir $%)
 # environment
@@ -115,7 +115,7 @@ PWD = /home/kynl/projects/message-project-Humax/program
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 1424
+SSH_AGENT_PID = 2037
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -159,9 +159,9 @@ CC = gcc
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-6049efdc-fce0-44e3-b411-a53a1d0a973a.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-09c06aaa-a2c3-48a3-b44e-643ea123cdf7.sock
 # environment
-XDG_SESSION_ID = 3
+XDG_SESSION_ID = 2
 # environment
 USER = kynl
 # environment
@@ -174,6 +174,8 @@ XDG_CURRENT_DESKTOP = Unity
 %D = $(patsubst %/,%,$(dir $%))
 # environment
 LC_TELEPHONE = vi_VN
+# makefile (from 'Makefile', line 3)
+LIBOBJ = server.o client.o common.o
 # default
 MAKE_COMMAND := make
 # default
@@ -231,9 +233,9 @@ LC_ADDRESS = vi_VN
 # environment
 LANG = C
 # environment
-VSCODE_PID = 3936
+VSCODE_PID = 2454
 # variable set hash-table stats:
-# Load=111/1024=11%, Rehash=0, Collisions=19/140=14%
+# Load=112/1024=11%, Rehash=0, Collisions=19/144=13%
 
 # Pattern-specific Variable Values
 
@@ -247,22 +249,26 @@ VSCODE_PID = 3936
 
 # Implicit Rules
 
-# No implicit rules.
+%.o: %.c
+#  recipe to execute (from 'Makefile', line 14):
+	$(CC) $(CFLAGS) $< -o $@ -pthread
+
+# 1 implicit rules, 0 (0.0%) terminal.
 
 # Files
 
-msg_client: msg_client.c
-#  Implicit rule search has not been done.
-#  Implicit/static pattern stem: ''
+msg_client.o: msg_client.c
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'msg_client'
 #  File does not exist.
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # automatic
-# @ := msg_client
+# @ := msg_client.o
 # automatic
 # % := 
 # automatic
-# * := 
+# * := msg_client
 # automatic
 # + := msg_client.c
 # automatic
@@ -273,38 +279,72 @@ msg_client: msg_client.c
 # ^ := msg_client.c
 # automatic
 # ? := msg_client.c
-# variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=1/12=8%
-#  recipe to execute (from 'Makefile', line 7):
-	$(CC) -o msg_client msg_client.c -pthread
-
-all: msg_client
  
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=1/15=7%
+#  recipe to execute (from 'Makefile', line 14):
+	$(CC) $(CFLAGS) $< -o $@ -pthread
+
+msg_client: msg_client.o server.o client.o common.o
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
+#  recipe to execute (from 'Makefile', line 8):
+	$(CC) $^ -o $@ -pthread
+
+all: msg_client msg_server
 #  Command line target.
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/4=0%
+# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
 
 # Not a target:
-.SUFFIXES:
+client.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.PHONY: clean
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
 # Not a target:
+msg_server.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+msg_server: msg_server.o server.o client.o common.o
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 11):
+	$(CC) $^ -o $@ -pthread
+
+# Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-01 17:08:26.859402581
+#  Last modified 2022-07-04 10:57:46.423524884
 #  File has been updated.
 #  Successfully updated.
 
 # Not a target:
+server.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
 msg_client.c:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-01 17:01:23.159642376
+#  Last modified 2022-07-04 10:43:31.603576098
 #  File has been updated.
 #  Successfully updated.
 
@@ -314,20 +354,35 @@ msg_client.c:
 #  Modification time never checked.
 #  File has not been updated.
 
+# Not a target:
+common.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+clean:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 18):
+	rm -rf *.o
+	rm -rf msg_client msg_server
+
 # files hash-table stats:
-# Load=6/1024=1%, Rehash=0, Collisions=0/21=0%
+# Load=14/1024=1%, Rehash=0, Collisions=4/42=10%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 19 / storage = 176 B / avg = 9 B
-# current buf: size = 8162 B / used = 176 B / count = 19 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 29 / storage = 261 B / avg = 9 B
+# current buf: size = 8162 B / used = 261 B / count = 29 / avg = 9 B
 
-# strcache performance: lookups = 29 / hit rate = 34%
+# strcache performance: lookups = 48 / hit rate = 39%
 # hash-table stats:
-# Load=19/8192=0%, Rehash=0, Collisions=1/29=3%
-# Finished Make data base on Fri Jul  1 17:08:28 2022
+# Load=29/8192=0%, Rehash=0, Collisions=3/48=6%
+# Finished Make data base on Mon Jul  4 10:58:22 2022
 
  

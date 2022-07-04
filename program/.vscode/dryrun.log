@@ -1,7 +1,19 @@
 make --dry-run --keep-going --print-directory
 make: Entering directory '/home/kynl/projects/message-project-Humax/program'
  
-gcc -o msg_client msg_client.c -pthread
+gcc -c -Wall msg_client.c -o msg_client.o -pthread
+ 
+gcc -c -Wall server.c -o server.o -pthread
+ 
+gcc -c -Wall client.c -o client.o -pthread
+ 
+gcc -c -Wall common.c -o common.o -pthread
+ 
+gcc msg_client.o server.o client.o common.o -o msg_client -pthread
+ 
+gcc -c -Wall msg_server.c -o msg_server.o -pthread
+ 
+gcc msg_server.o server.o client.o common.o -o msg_server -pthread
  
 make: Leaving directory '/home/kynl/projects/message-project-Humax/program'
  
