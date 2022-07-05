@@ -11,7 +11,7 @@ msg_server: msg_server.o $(LIBOBJ)
 	$(CC) $^ -o $@ -pthread
 
 %.o: %.c
-	$(CC) $(CFLAGS) $< -o $@ -pthread
+	$(CC) $(CFLAGS) $^ -o $@ -pthread
 
 .PHONY: clean
 clean:
