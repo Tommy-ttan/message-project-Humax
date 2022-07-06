@@ -14,15 +14,15 @@ struct client
 };
 
 char getch(void); 
-void printMessageInLine(int, char *);                 
-void showBuffer();                              
-void printMessage(char *);                  
-int checkValidInputMessage(char *);      
-void processInput(char, void (*)());   
+void Client_printMessageInLine(int, char *);    
+void Client_showBuffer();                                     
+void Client_printMessage(char *);                  
+int Client_checkValidInputMessage(char *);      
+void Client_processInput(char ch, void (*pfunc_process)(), void (*pfunc_exit)()); 
 
-int initClient(void);
-int connectServer(void);
-int chooseRole(void);
+int Client_init(void);
+int Client_connect(void);
+int Client_chooseRole(void);
 
 
 #endif

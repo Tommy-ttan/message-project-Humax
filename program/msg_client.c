@@ -1,20 +1,15 @@
 #include "client.h"
 #include "common.h"
 
-pthread_t thread_recv, thread_insert_msg;
-int thread_recv_id;
 
-
+void sendMessageToServer()
+{
+}
 void exitProgram()
 {
-//	sendMessage(server_fd, EXIT_MESSAGE);
+	//	sendMessage(server_fd, EXIT_MESSAGE);
 	printf("\nQuit program\n");
 	exit(0);
-}
-void *threadRecvMessageFunc_test(void *arg)
-{
-
-	return arg;
 }
 
 int main()
@@ -22,16 +17,17 @@ int main()
 	printf("--- HUMAX CHAT APP ----");
 
 	printf("\n---- WELCOME TO HUMAX CHAT ROOM ----\n\n\n\n");
-	printMessage("");
+	Client_printMessage("");
 
-	// recv msg thread
-	//thread_recv_id = pthread_create(&thread_recv, NULL, threadRecvMessageFunc_test, NULL);
 
 	// insert input message
 	while (1)
 	{
-		processInput(getch(), exitProgram);
-		showBuffer();
+		//handle each character entered by the user
+		//2 functions will be executed when the user enters a message or exits the program
+		Client_processInput(getch(), sendMessageToServer, exitProgram);
+		//display entered characters
+		Client_showBuffer();
 	}
 
 	return 0;
