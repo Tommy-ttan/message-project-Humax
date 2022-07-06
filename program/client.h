@@ -15,6 +15,16 @@ int connectServer(void);
 int chooseRole(void);
 
 
+struct client 
+{
+    int fd;
+    int role;
+    char *send_buff[];
+    char *recv_buff[];
+    void (*pfunc_send)();
+    void (*pfunc_recv)();
+}
+
 
 
 
