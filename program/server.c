@@ -124,3 +124,22 @@ int Server_init(void)
 
 	return listenfd;
 }
+/**
+ * @brief accept new connection and add new client to list
+ * 
+ * @param listenFd: file discriptor of server socket
+ * @param _client_list: linked list of clients 
+ * @return int: return file discriptor of neww socket that connect to client
+ */
+int Server_acceptConnect(int  listenFd, p_client _client_list)
+{
+	int newFd;
+	struct sockaddr_in newAddr;
+	socklen_t cliLen = sizeof(newAddr);
+	newFD = accept(listenFd, (struct sockaddr*)&new_addr, &cliLen);
+	if(newFd >= 0)
+	{
+		Server_addList(_client_list, listenFd);
+	}
+	return newFd;
+}
