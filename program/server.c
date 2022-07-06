@@ -131,15 +131,15 @@ int Server_init(void)
  * @param _client_list: linked list of clients 
  * @return int: return file discriptor of neww socket that connect to client
  */
-int Server_acceptConnect(int  listenFd, p_client _client_list)
+int Server_acceptConnect(int  _listen_fd, p_client _client_list)
 {
-	int newFd;
-	struct sockaddr_in newAddr;
-	socklen_t cliLen = sizeof(newAddr);
-	newFD = accept(listenFd, (struct sockaddr*)&new_addr, &cliLen);
-	if(newFd >= 0)
+	int _new_fd;
+	struct sockaddr_in _new_addr;
+	socklen_t _cli_len = sizeof(_new_addr);
+	_new_fd = accept(_listen_fd, (struct sockaddr*)&_new_addr, &_cli_len);
+	if(_new_fd >= 0)
 	{
-		Server_addList(_client_list, listenFd);
+		Server_addList(_client_list, _listen_fd);
 	}
-	return newFd;
+	return _new_fd;
 }
