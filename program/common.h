@@ -19,7 +19,6 @@
 #include <arpa/inet.h> 
 
 
-
 #define EXIT_MESSAGE            ":*@#!$^q"
 #define BUFFER_SIZE             255
 #define SOCKET_PORT             5000
