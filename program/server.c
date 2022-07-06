@@ -1,122 +1,126 @@
 #include "server.h"
 
-char input_buf[INPUT_BUFFER_SIZE] = "";
-
-// Kynl
 /**
- * @brief get character from stdin
- * 
- * @return char 
+ * @brief Create a Client with next = NULL
+ *
+ * @param _fd file description of new client
+ * @return <p_client>
  */
-char getch(void)
+p_client Server_createClient(int _fd)
 {
-    char buf = 0;
-    struct termios old = {0};
-    fflush(stdout);
-    if(tcgetattr(0, &old) < 0)
-        perror("tcsetattr()");
-    old.c_lflag &= ~ICANON;
-    old.c_lflag &= ~ECHO;
-    old.c_cc[VMIN] = 1;
-    old.c_cc[VTIME] = 0;
-    if(tcsetattr(0, TCSANOW, &old) < 0)
-        perror("tcsetattr ICANON");
-    if(read(0, &buf, 1) < 0)
-        perror("read()");
-    old.c_lflag |= ICANON;
-    old.c_lflag |= ECHO;
-    if(tcsetattr(0, TCSADRAIN, &old) < 0)
-        perror("tcsetattr ~ICANON");
-    return buf;
+	p_client head = malloc(sizeof(p_client));
+	head->fd = _fd;
+	head->next = NULL;
+	return head;
 }
 
 /**
- * @brief print message at select line
- * 
- * @param lines 
- * @param msg 
+ * @brief Create a new client list start from head
+ *
+ * @return <p_client> List_head
  */
-void printMessage(int lines, char *msg)
+p_client Server_createList(void)
 {
-        printf( "\r"                    // Moves cursor to beginning of line.
-                "\033[1B"               // Move cursor up 1 lines.
-                "\033[s"                // Save cursor position. 
-                "\033[%dA"              // Move cursor up d lines.
-                "\x1b[2K"               // Clear entire line
-                "%s"                    // String to print.
-                "\033[u"                // Restore cursor position.
-                "\033[1A"               // Move cursor up d lines.
-                "\033[%ldC"             // Move cursor to end of lines.
-                ,
-                lines,
-                msg, 
-                strlen(input_buf) + 9
-        );
-        fflush(stdout);
+	return Server_createClient(0);
 }
 
 /**
- * @brief show buffer (user input temp)
- * 
+ * @brief add new client to list. 
+ * create a new list if there's no list
+ * @param _client_list active client list
+ * @param _fd file description of client
+ * @return <int> success or not
  */
-void showBuffer()
+int Server_addList(p_client _client_list, int _fd)
 {
-        char buf[INPUT_BUFFER_SIZE + 9];
-        sprintf(buf, "Message: %s", input_buf);
-        printMessage(1, buf);
+	if (_client_list == NULL)
+	{
+		_client_list = Server_createList();
+		Server_addList(_client_list, _fd);
+		return 1;
+	}
+	p_client _browse = _client_list;
+	while (_browse->next != NULL)
+	{
+		_browse = _browse->next;
+	}
+	p_client _new = Server_createClient(_fd);
+	_browse->next = _new;
+
+	return 1;
 }
 
 /**
- * @brief insert new message in screen
- * 
- * @param msg 
+ * @brief remove a client from client list
+ *
+ * @param _client_list active client list
+ * @param _fd file description of client need to be removed
+ * @return <int> success or not
  */
-void insertNewMessage(char *msg)
+int Server_removeList(p_client _client_list, int _fd)
 {
-        printf("\n\n");
-        printMessage(4, msg);
-        printMessage(3, "_____________________");
-        printMessage(2, "Enter ':q' to quit");
-        showBuffer();
+	if (_client_list == NULL)
+		return 0;
+	p_client _browse1 = _client_list;
+	p_client _browse2 = _browse1->next;
+	while (_browse2 != NULL)
+	{
+		if (_browse2->fd == _fd)
+		{
+			_browse1->next = _browse2->next;
+			free(_browse2);
+			return 1;
+		}
+		_browse1 = _browse2;
+		_browse2 = _browse2->next;
+	}
+	return 0;
 }
 
 /**
- * @brief check valid input message
- * 
- * @param msg 
- * @return int 
+ * @brief Show the current client list
+ *
+ * @param _client_list active client list
+ * @return <int> empty or not
  */
-int checkValidInputMessage(char *msg)
+int Server_showList(p_client _client_list)
 {
-        for(int i=0; i<strlen(msg); i++)
-                if(isalpha(msg[i]) || isdigit(msg[i]))
-                        return 1;
-        return 0;
+	if (_client_list == NULL || _client_list->next == NULL)
+	{
+		printf("Client list is empty");
+		return 0;
+	}
+
+	p_client _browse = _client_list->next;
+	while (_browse != NULL)
+	{
+		printf("%d -> ", _browse->fd);
+		_browse = _browse->next;
+	}
+	printf("NULL\n");
+	return 1;
 }
 
 /**
- * @brief process user input
+ * @brief Init the server
  * 
- * @param ch 
+ * @return <int> listenfd, as a param of Server_acceptConnect() 
  */
-void processInput(char ch, void (*p_exit_func)())
+int Server_init(void)
 {
-        if(ch == '\n' || strlen(input_buf) >= INPUT_BUFFER_SIZE)        //newline or buffer's length is maximum
-        {
-                if(!strcmp(input_buf, EXIT_STRING))
-                    p_exit_func();
-                if(checkValidInputMessage(input_buf))
-                    insertNewMessage(input_buf);
-                input_buf[0]='\0';
-        }
-        else if(ch == 127)        //backspace
-        {
-              input_buf[strlen(input_buf)-1] = '\0';  
-        }
-        else if(isprint(ch))    //insert ch to buffer
-        {
-                int len = strlen(input_buf);
-                input_buf[len] = ch;
-                input_buf[len+1] = '\0';
-        }
+	int listenfd = 0;
+	struct sockaddr_in serv_addr;
+
+	listenfd = socket(AF_INET, SOCK_STREAM, 0);
+	memset(&serv_addr, '0', sizeof(serv_addr));
+
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	serv_addr.sin_port = htons(PORT);
+
+	bind(listenfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+
+	listen(listenfd, 10);
+
+	return listenfd;
 }

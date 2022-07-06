@@ -3,27 +3,27 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <string.h>
-#include <ctype.h>
-#include <time.h>
-#include <errno.h> 
-#include <signal.h>
-#include <unistd.h>  
-#include <termios.h>
-#include <pthread.h>
-#include <sys/wait.h>
+#include "common.h"
 
+/**
+ * @brief _client structure to make client list, use only for server-side.
+ * @param fd file description
+ */
+typedef struct _client{
+	int fd;
+	struct _client *next;
+} *p_client;
 
-#define EXIT_STRING             ":q"
-#define INPUT_BUFFER_SIZE       255
+p_client Server_createClient(int _fd);
+p_client Server_createList(void);
+int Server_addList(p_client _client_list, int _fd);
+int Server_removeList(p_client _client_list, int _fd);
+int Server_showList(p_client _client_list);
 
+int Server_init(void);
 
-char getch(void); 
-void printMessage(int, char *);                 
-void showBuffer();                              
-void insertNewMessage(char *);                  
-int checkValidInputMessage(char *);      
-void processInput(char, void (*)());   
 
 #endif
