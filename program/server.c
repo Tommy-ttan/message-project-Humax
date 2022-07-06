@@ -104,25 +104,25 @@ int Server_showList(p_client _client_list)
 /**
  * @brief Init the server
  * 
- * @return <int> listenfd, as a param of Server_acceptConnect() 
+ * @return <int> _listen_fd, as a param of Server_acceptConnect() 
  */
 int Server_init(void)
 {
-	int listenfd = 0;
-	struct sockaddr_in serv_addr;
+	int _listen_fd = 0;
+	struct sockaddr_in _serv_addr;
 
-	listenfd = socket(AF_INET, SOCK_STREAM, 0);
-	memset(&serv_addr, '0', sizeof(serv_addr));
+	_listen_fd = socket(AF_INET, SOCK_STREAM, 0);
+	memset(&_serv_addr, '0', sizeof(_serv_addr));
 
-	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serv_addr.sin_port = htons(SOCKET_PORT);
+	_serv_addr.sin_family = AF_INET;
+	_serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	_serv_addr.sin_port = htons(SOCKET_PORT);
 
-	bind(listenfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+	bind(_listen_fd, (struct sockaddr *)&_serv_addr, sizeof(_serv_addr));
 
-	listen(listenfd, 10);
+	listen(_listen_fd, 10);
 
-	return listenfd;
+	return _listen_fd;
 }
 /**
  * @brief accept new connection and add new client to list

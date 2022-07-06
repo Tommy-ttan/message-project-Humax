@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
-'make.exe' is not recognized as an internal or external command,
-operable program or batch file.
-
-=======
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # GNU Make 4.1
 # Built for x86_64-pc-linux-gnu
@@ -12,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Jul  6 10:18:57 2022
+# Make data base, printed on Wed Jul  6 13:12:36 2022
 
 # Variables
 
@@ -173,7 +167,7 @@ CC = gcc
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-c3e897b6-d2c3-4b9c-8eac-e0f1e4fe4136.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-6f895aed-4431-4d1d-b4e7-19f7189f9b58.sock
 # environment
 XDG_SESSION_ID = 1
 # environment
@@ -192,8 +186,6 @@ LC_TELEPHONE = vi_VN
 LIBOBJ = server.o client.o common.o
 # default
 MAKE_COMMAND := make
-# environment
-OLDPWD = /home/dat/Desktop/training/humax_training/finaltest
 # default
 .VARIABLES := 
 # automatic
@@ -213,6 +205,8 @@ GDK_BACKEND = x11
 # environment
 LC_PAPER = vi_VN
 # environment
+NO_AT_BRIDGE = 1
+# environment
 QT_ACCESSIBILITY = 1
 # environment
 TEXTDOMAINDIR = /usr/share/locale/
@@ -231,7 +225,7 @@ DBUS_STARTER_BUS_TYPE = session
 # environment
 QT4_IM_MODULE = xim
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/d1b4f5ee_6222_4a05_99f3_6fa55d379228
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/22e75c30_6512_4593_b37b_07fbd7eb688d
 # automatic
 ^F = $(notdir $^)
 # environment
@@ -255,7 +249,7 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 6766
+VSCODE_PID = 10184
 # environment
 DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=da1bcc0f05c75be15fb0480462c4fc75
 # variable set hash-table stats:
@@ -267,9 +261,9 @@ DBUS_STARTER_ADDRESS = unix:path=/run/user/1000/bus,guid=da1bcc0f05c75be15fb0480
 
 # Directories
 
-# . (device 2049, inode 917782): 13 files, no impossibilities.
+# . (device 2049, inode 917782): 14 files, no impossibilities.
 
-# 13 files, no impossibilities in 1 directories.
+# 14 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -355,7 +349,7 @@ msg_server: msg_server.o server.o client.o common.o
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-06 10:18:22.795195957
+#  Last modified 2022-07-06 11:43:36.133964623
 #  File has been updated.
 #  Successfully updated.
 
@@ -368,7 +362,7 @@ server.o:
 # Not a target:
 msg_client.c:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-06 10:18:22.795195957
+#  Last modified 2022-07-06 11:43:36.133964623
 #  File has been updated.
 #  Successfully updated.
 
@@ -401,13 +395,12 @@ clean:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 29 / storage = 261 B / avg = 9 B
-# current buf: size = 8162 B / used = 261 B / count = 29 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 30 / storage = 272 B / avg = 9 B
+# current buf: size = 8162 B / used = 272 B / count = 30 / avg = 9 B
 
-# strcache performance: lookups = 48 / hit rate = 39%
+# strcache performance: lookups = 49 / hit rate = 38%
 # hash-table stats:
-# Load=29/8192=0%, Rehash=0, Collisions=3/48=6%
-# Finished Make data base on Wed Jul  6 10:18:57 2022
+# Load=30/8192=0%, Rehash=0, Collisions=3/49=6%
+# Finished Make data base on Wed Jul  6 13:12:36 2022
 
  
->>>>>>> ab7eaa6300915df3b1f0b8affe0d889b950eecad

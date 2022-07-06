@@ -4,7 +4,7 @@
 #include "common.h"
 
 /**
- * @brief _client structure to make client list, use only for server-side.
+ * @brief _client structure to make client list, USE ONLY for server-side.
  * @param fd file description
  */
 typedef struct _client{

@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-make.exe --dry-run --always-make --keep-going --print-directory
-'make.exe' is not recognized as an internal or external command,
-operable program or batch file.
-
-=======
 make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/dat/Desktop/training/humax_training/finaltest/message-project-Humax/program'
 gcc -c -Wall msg_client.c -o msg_client.o -pthread
@@ -15,4 +9,3 @@ gcc -c -Wall msg_server.c -o msg_server.o -pthread
 gcc msg_server.o server.o client.o common.o -o msg_server -pthread
 make: Leaving directory '/home/dat/Desktop/training/humax_training/finaltest/message-project-Humax/program'
  
->>>>>>> ab7eaa6300915df3b1f0b8affe0d889b950eecad
