@@ -1,5 +1,4 @@
 #include "server.h"
-#include "client.h"
 #include "common.h"
 
 int main()

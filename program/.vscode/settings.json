@@ -1,6 +1,17 @@
+<<<<<<< HEAD
 {
     "makefile.extensionOutputFolder": "./.vscode",
     "files.associations": {
         "server.h": "c"
     }
 }
+=======
+{
+    "makefile.extensionOutputFolder": "./.vscode",
+    "files.associations": {
+			"server.h": "c",
+			"in.h": "c",
+			"common.h": "c"
+		}
+}
+>>>>>>> ab7eaa6300915df3b1f0b8affe0d889b950eecad
