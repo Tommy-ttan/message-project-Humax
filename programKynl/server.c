@@ -141,7 +141,6 @@ int Server_acceptConnect(int  _listen_fd, p_client _client_list)
 	if(_new_fd >= 0)
 	{
 		Server_addList(_client_list, _new_fd);
-		printf("Add to list success\n");
 	}
 	return _new_fd;
 }
@@ -160,9 +159,7 @@ int Server_sendAll(p_client _client_list, char *_message)
 	p_client _browse = _client_list->next;
 	while (_browse != NULL)
 	{
-		printf("send to client fd: %d\n", _browse->fd);
 		sendMess(_browse->fd, _message);
-		printf("send to client fd: %d success\n", _browse->fd);
 		_browse = _browse->next;
 	}
 	

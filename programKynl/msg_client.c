@@ -7,11 +7,27 @@ int gthread_recv_id;
 
 void sendMessageToServer()
 {
-	gclient.pfunc_send(gclient.fd, input_buf);
+	char _buf[BUFFER_SIZE + 20];
+	sprintf(_buf, "%s: %s", gclient.name, input_buf);
+
+	//send message when user is talker or both
+	if(gclient.role != ROLE_LISTENER)
+		sendMess(gclient.fd, _buf);
+	else
+		Client_printMessage("[Message center]: Listener can not send messages!");
+
+	//because talker can't receive messages, so we need to display the message on the screen
+	if(gclient.role == ROLE_TALKER)
+		Client_printMessage(_buf);
 }
 void exitProgram()
 {
+	char _buf[BUFFER_SIZE];
+	sprintf(_buf, "[Message center]: %s has letf the room!", gclient.name);
+	sendMess(gclient.fd, _buf);
+	//exit message
 	sendMess(gclient.fd, EXIT_MESSAGE);
+	//exit program
 	printf("\nQuit program\n");
 	exit(0);
 }
@@ -21,10 +37,10 @@ void *RecvMessageHandle(void *arg_client_fd)
 	int client_fd = *((int *)arg_client_fd);
 	while (1)
 	{
-		n = gclient.pfunc_recv(client_fd, gclient.recv_buff);
+		n = recvMess(client_fd, gclient.recv_buff);
 		if(n < 0)
 		{
-			perror("Error while receiving data from server");
+			printf("\nError while receiving data from server");
 			exit(1);
 		}
 		else if(n == 0)
@@ -48,29 +64,22 @@ int main()
 	gclient.fd = Client_connect();
 	if(gclient.fd < 0)
 		exit(1);
+	
+	//enter user's name
+	Client_getUserName(gclient.name);
+
 	//select role
 	gclient.role = Client_chooseRole();
-	switch (gclient.role)
-	{
-	case 1:
-		gclient.pfunc_send = NULL;
-		gclient.pfunc_recv = recvMess;
-		break;
-	case 2:
-		gclient.pfunc_send = sendMess;
-		gclient.pfunc_recv = NULL;
-		break;
-	default:
-		gclient.pfunc_send = sendMess;
-		gclient.pfunc_recv = recvMess;
-		break;
-	}
+
 	//welcome to chat room
 	printf("\n---- WELCOME TO HUMAX CHAT ROOM ----\n\n\n\n");
 	Client_printMessage("");
+	char _buf[BUFFER_SIZE + 20];
+	sprintf(_buf, "[Message center]: %s has joined the room!", gclient.name);
+	sendMess(gclient.fd, _buf);
 
 	//create receive thread
-	if(gclient.pfunc_recv != NULL)
+	if(gclient.role != ROLE_TALKER)
 		gthread_recv_id = pthread_create(&gthreads_recv, NULL, RecvMessageHandle, (void *)&gclient.fd);
 
 	// insert input message
@@ -79,8 +88,6 @@ int main()
 		//handle each character entered by the user
 		//2 functions will be executed when the user enters a message or exits the program
 		Client_processInput(getch(), sendMessageToServer, exitProgram);
-		//display entered characters
-		Client_showBuffer();
 	}
 
 	return 0;

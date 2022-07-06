@@ -25,7 +25,7 @@ char getch(void)
         perror("read()");
     old.c_lflag |= ICANON;
     old.c_lflag |= ECHO;
-	if (tcsetattr(0, TCSADRAIN, &old) < 0)
+    if (tcsetattr(0, TCSADRAIN, &old) < 0)
         perror("tcsetattr ~ICANON");
     return buf;
 }
@@ -95,7 +95,7 @@ int Client_checkValidInputMessage(char *msg)
 
 /**
  * @brief handle user input string
- * 
+ *
  * @param ch input character
  * @param pfunc_process the function will be executed when the user enters the message
  * @param pfunc_exit The function will be executed when the program exits
@@ -107,10 +107,10 @@ void Client_processInput(char ch, void (*pfunc_process)(), void (*pfunc_exit)())
         if (!strcmp(input_buf, ":q"))
             pfunc_exit();
         if (Client_checkValidInputMessage(input_buf))
-		{
-            //Client_printMessage(input_buf);
-			pfunc_process();
-		}
+        {
+            // Client_printMessage(input_buf);
+            pfunc_process();
+        }
         input_buf[0] = '\0';
     }
     else if (ch == 127) // backspace
@@ -123,6 +123,8 @@ void Client_processInput(char ch, void (*pfunc_process)(), void (*pfunc_exit)())
         input_buf[_len] = ch;
         input_buf[_len + 1] = '\0';
     }
+    // display entered characters
+    Client_showBuffer();
 }
 
 /**
@@ -196,19 +198,35 @@ int Client_connect()
  */
 int Client_chooseRole(void)
 {
-    int _role = 0;
-
+    char _buf[50];
     printf("\nPlease choose your role: \n");
-    printf("1. Listener\n2. Talker\n3. Both\n");
-    printf("Enter your choice: ");
-    scanf("%d", &_role);
-    if (_role < 1 || _role > 3)
+    while (1)
     {
-        while (_role < 1 || _role > 3)
-        {
-            printf("\nYour choice is invalid, please choose again: ");
-            scanf("%d", &_role);
-        }
+        printf("1. Listener\n2. Talker\n3. Both\n");
+        printf("Enter your choice: ");
+        fgets(_buf, sizeof(_buf), stdin);
+        fflush(stdin);
+        if (strlen(_buf) > 2 || _buf[0] < '1' || _buf[0] > '3')
+            printf("\nYour choice is invalid. Please choose again!\n");
+        else
+            break;
     }
-    return _role;
+    return _buf[0] - '0';
+}
+
+void Client_getUserName(char *_pname)
+{
+    printf("\nEnter your name: ");
+    while (1)
+    {
+        fgets(_pname, sizeof(_pname), stdin);
+        _pname[strlen(_pname) - 1] = '\0';
+        fflush(stdin);
+        if (strlen(_pname) < 2)
+            printf("\nYour name is too short. Please enter your name again!\n");
+        else if (strlen(_pname) > 20)
+            printf("\nYour name is too long. Please enter your name again!\n");
+        else
+            break;
+    }
 }
