@@ -3,8 +3,8 @@
 /**
  * @brief send mess (from buffer)
  * 
- * @param fd
- * @param buff 
+ * @param fd file decription of socket
+ * @param buff buffer
  * @return void
  */
 void sendMess(int fd, char buff[])
@@ -15,8 +15,8 @@ void sendMess(int fd, char buff[])
 /**
  * @brief receive message
  * 
- * @param fd
- * @param buff 
+ * @param fd file decription of socket
+ * @param buff buffer
  * @return void
  */
 void recvMess(int fd, char buff[])
