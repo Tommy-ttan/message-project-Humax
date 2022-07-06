@@ -5,25 +5,16 @@
 pthread_t thread_recv, thread_insert_msg;
 int thread_recv_id;
 
-void exitProgram();					 // run before the program ends
-void *threadRecvMessageFunc(void *); // thread receive message from server
 
 void exitProgram()
 {
+//	sendMessage(server_fd, EXIT_MESSAGE);
 	printf("\nQuit program\n");
 	exit(0);
 }
 void *threadRecvMessageFunc_test(void *arg)
 {
-	char s[10][20] = {"Oneeeeeeee", "Twoooooooo", "Threeeeeee", "Fourrrrrrr", "Fiveeeeeeeee",
-					  "Sixxxxxxxxxx", "Sevennnnnnnnn", "Eighttttttttt", "Nineeeeeee", "Tennnnnnnnn"};
-	int i = 0;
-	while (1)
-	{
-		i = (i + 1) % 10;
-		insertNewMessage(s[i]);
-		usleep(1000000);
-	}
+
 	return arg;
 }
 
@@ -32,7 +23,7 @@ int main()
 	printf("--- HUMAX CHAT APP ----");
 
 	printf("\n---- WELCOME TO HUMAX CHAT ROOM ----\n\n\n\n");
-	insertNewMessage("");
+	printMessage("");
 
 	// recv msg thread
 	//thread_recv_id = pthread_create(&thread_recv, NULL, threadRecvMessageFunc_test, NULL);
