@@ -124,10 +124,11 @@ int Server_init(void)
 
 	return _listen_fd;
 }
+
 /**
  * @brief accept new connection and add new client to list
  * 
- * @param listenFd: file discriptor of server socket
+ * @param _listen_fd: file discriptor of server socket
  * @param _client_list: linked list of clients 
  * @return int: return file discriptor of neww socket that connect to client
  */
@@ -139,7 +140,28 @@ int Server_acceptConnect(int  _listen_fd, p_client _client_list)
 	_new_fd = accept(_listen_fd, (struct sockaddr*)&_new_addr, &_cli_len);
 	if(_new_fd >= 0)
 	{
-		Server_addList(_client_list, _listen_fd);
+		Server_addList(_client_list, _new_fd);
 	}
 	return _new_fd;
+}
+
+/**
+ * @brief send message to all client
+ * 
+ * @param _client_list current client list
+ * @param _message message to send
+ * @return <int> list is empty or not
+ */
+int Server_sendAll(p_client _client_list, char *_message)
+{
+	if (_client_list == NULL || _client_list->next == NULL)	return 0;
+
+	p_client _browse = _client_list->next;
+	while (_browse != NULL)
+	{
+		sendMess(_browse->fd, _message);
+		_browse = _browse->next;
+	}
+	
+	return 1;
 }

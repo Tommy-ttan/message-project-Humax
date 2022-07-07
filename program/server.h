@@ -20,6 +20,6 @@ int Server_showList(p_client _client_list);
 
 int Server_init(void);
 int Server_acceptConnect(int  listenFd, p_client _client_list);
-
+int Server_sendAll(p_client _client_list, char *_message);
 
 #endif

@@ -3,26 +3,30 @@
 
 #include "common.h"
 
+#define ROLE_LISTENER   1
+#define ROLE_TALKER     2
+#define ROLE_BOTH       3
+
 struct client 
 {
     int fd;
     int role;
+    char name[100];
+    int connected;
     char send_buff[BUFFER_SIZE];
     char recv_buff[BUFFER_SIZE];
-    void (*pfunc_send)();
-    void (*pfunc_recv)();
 };
 
-char getch(void); 
-void Client_printMessageInLine(int, char *);    
+extern char input_buf[BUFFER_SIZE];
+
+char getch();
 void Client_showBuffer();                                     
-void Client_printMessage(char *);                  
-int Client_checkValidInputMessage(char *);      
+void Client_printMessage(char *);               
 void Client_processInput(char ch, void (*pfunc_process)(), void (*pfunc_exit)()); 
 
-int Client_init(void);
 int Client_connect(void);
 int Client_chooseRole(void);
+void Client_getUserName(char *_pname);
 
 
 #endif
