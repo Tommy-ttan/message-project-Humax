@@ -1,2 +1,6 @@
 program/.vscode
+programKynl/.vscode
+program/*.o
+programKynl/*.o
+
 

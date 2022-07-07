@@ -65,7 +65,7 @@ void *RecvMessageHandle(void *arg_client_fd)
 }
 void ctr_C_handler(sig_t s)
 {
-	exitProgram();
+	//exitProgram();
 }
 
 int main()
