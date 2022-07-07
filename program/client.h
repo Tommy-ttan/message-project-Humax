@@ -11,7 +11,7 @@ struct client
 {
     int fd;
     int role;
-    char name[100];
+    char name[NAME_SIZE];
     int connected;
     char send_buff[BUFFER_SIZE];
     char recv_buff[BUFFER_SIZE];

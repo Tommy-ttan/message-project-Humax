@@ -15,8 +15,9 @@ void *ClientHandle(void *arg_client_fd)
         n = recvMess(client_fd, _recv_buf);
         if(n < 0)
 		{
-			perror("Error while receiving data from client");
-			exit(1);
+			//perror("Error while receiving data from client");
+			//exit(1);
+            break;
 		}
 		else if(n == 0 || !strcmp(_recv_buf, EXIT_MESSAGE))
 		{
@@ -32,14 +33,21 @@ void *ClientHandle(void *arg_client_fd)
     }
     return arg_client_fd;   
 }
+void ctr_C_handler(sig_t s)
+{
+    Server_sendAll(gclient_list, "[Message center]: server has stopped working!");
+	exit(0);
+}
 
 int main()
 {
     pthread_t tid;
     int new_client_fd;
     
-    printf("\n--- HUMAX CHAT APP SERVER ----\n");
+    //hanlde ctrl-C signal
+	signal (SIGINT, ctr_C_handler);
     //create list
+    printf("\n--- HUMAX CHAT APP SERVER ----\n");
     gclient_list = Server_createList();
     //init server
     glisten_fd = Server_init();

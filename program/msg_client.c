@@ -22,8 +22,8 @@ void sendMessageToServer()
 void exitProgram()
 {
 	//kill recv thread
-	if(gthread_id != 0)
-		pthread_cancel(gthread_id);
+	//if(gthread_id != 0)
+	//	pthread_cancel(gthread_id);
 	//send exit message to server
 	if(gclient.connected)
 	{
@@ -35,7 +35,7 @@ void exitProgram()
 	}
 	//exit program
 	printf("\nQuit program\n");
-	printf("\n\r");
+	//printf("\n\r");
 	exit(0);
 }
 void *RecvMessageHandle(void *arg_client_fd)
@@ -52,12 +52,14 @@ void *RecvMessageHandle(void *arg_client_fd)
 		}
 		else if(n == 0)
 		{
-			printf("\nServer is closed!");
+			printf("Server is closed!");
 			exitProgram();
 		}
 		else
 		{
-			Client_printMessage(gclient.recv_buff);
+			//check role is talker or this is a special message
+			if(gclient.role != ROLE_TALKER || gclient.recv_buff[0] == '[')
+				Client_printMessage(gclient.recv_buff);
 		}
 		memset(gclient.recv_buff, 0, BUFFER_SIZE);
 	}
@@ -94,8 +96,7 @@ int main()
 	sendMess(gclient.fd, _buf);
 
 	//create receive thread
-	if(gclient.role != ROLE_TALKER)
-		pthread_create(&gthread_id, NULL, RecvMessageHandle, (void *)&gclient.fd);
+	pthread_create(&gthread_id, NULL, RecvMessageHandle, (void *)&gclient.fd);
 
 	// insert input message
 	while (1)

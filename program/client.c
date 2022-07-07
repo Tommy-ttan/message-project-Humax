@@ -4,6 +4,17 @@
 char input_buf[BUFFER_SIZE] = "";
 
 /**
+ * @brief clear all character in stdin buffer
+ * 
+ * @param str input string
+ */
+void clearStdinBuffer(char *str, int _size_max)
+{
+    if(strlen(str) == _size_max - 1 && str[strlen(str) - 1] != '\n')
+        while ((getchar()) != '\n');
+    fflush(stdin);
+}
+/**
  * @brief get character from stdin
  *
  * @return char
@@ -46,7 +57,7 @@ void Client_printMessageInLine(int lines, char *msg)
            "%s"        // String to print.
            "\033[u"    // Restore cursor position.
            "\033[1A"   // Move cursor up d lines.
-           "\033[%ldC" // Move cursor to end of lines.
+           "\033[%dC" // Move cursor to end of lines.
            ,
            lines,
            msg,
@@ -86,7 +97,7 @@ void Client_printMessage(char *msg)
  * @param msg
  * @return int: return 1 if the message is valid (len>0, not all are spacebars)
  */
-int Client_checkValidInputMessage(char *msg)
+int Client_checkValidString(char *msg)
 {
     for (int i = 0; i < strlen(msg); i++)
         if (isprint(msg[i]) && msg[i] != ' ' && msg[i] != '\t')
@@ -107,7 +118,7 @@ void Client_processInput(char ch, void (*pfunc_process)(), void (*pfunc_exit)())
     {
         if (!strcmp(input_buf, ":q"))
             pfunc_exit();
-        if (Client_checkValidInputMessage(input_buf))
+        if (Client_checkValidString(input_buf))
         {
             // Client_printMessage(input_buf);
             pfunc_process();
@@ -171,7 +182,11 @@ int Client_connect()
         {
             printf("\nEnter server IP to connect: ");
             fgets(_buffer_IP, sizeof(_buffer_IP), stdin);
-            _buffer_IP[strlen(_buffer_IP) - 1] = '\0';
+            //clear stdin buffer
+            clearStdinBuffer(_buffer_IP, NAME_SIZE);
+            //clear \n in the end of string
+            if(strlen(_buffer_IP) > 0)
+                _buffer_IP[strlen(_buffer_IP) - 1] = '\0';
             _saddr.sin_addr.s_addr = inet_addr(_buffer_IP);
             printf("trying to connect...\n");
             _ret_val = connect(_fd_socket, (struct sockaddr *)&_saddr, sizeof(struct sockaddr_in));
@@ -199,14 +214,16 @@ int Client_connect()
  */
 int Client_chooseRole(void)
 {
-    char _buf[50];
+    char _buf[NAME_SIZE];
     printf("\nPlease choose your role: \n");
     while (1)
     {
         printf("1. Listener\n2. Talker\n3. Both\n");
         printf("Enter your choice: ");
-        fgets(_buf, BUFFER_SIZE, stdin);
-        fflush(stdin);
+        fgets(_buf, NAME_SIZE, stdin);
+        //clear stdin buffer
+        clearStdinBuffer(_buf, NAME_SIZE);
+        //check valid
         if (strlen(_buf) > 2 || _buf[0] < '1' || _buf[0] > '3')
             printf("\nYour choice is invalid. Please choose again!\n");
         else
@@ -215,20 +232,45 @@ int Client_chooseRole(void)
     return _buf[0] - '0';
 }
 
+/**
+ * @brief check valid of user's name
+ * 
+ * @param _pname user's name
+ * @return int 
+ */
+int checkValidName(char *_pname)
+{
+    if(_pname[0] == '[' || _pname[0] == ' ' || _pname[strlen(_pname)-1] == ' ' ||  _pname[strlen(_pname)-1] == ']')
+        return 0;
+    for(int i=0; i<strlen(_pname); i++)
+        if(_pname[i] != ' ' && !isalpha(_pname[i]) && !isdigit(_pname[i]))
+            return 0;
+    return 1;
+}
+
+/**
+ * @brief get user's name
+ * 
+ * @param _pname user's name
+ */
 void Client_getUserName(char *_pname)
 {
     while (1)
     {
         printf("\nEnter your name: ");
-        fgets(_pname, 100, stdin);
+        fgets(_pname, NAME_SIZE, stdin);
+        //clear stdin buffer
+        clearStdinBuffer(_pname, NAME_SIZE);
+        //clear \n in the end of string
         if(strlen(_pname) > 0)
             _pname[strlen(_pname) - 1] = '\0';
-        fflush(stdin);
-        fflush(stdout);
+        //check valid of user's name
         if (strlen(_pname) < 2)
             printf("\nYour name is too short. Please enter your name again!\n");
         else if (strlen(_pname) > 20)
             printf("\nYour name is too long. Please enter your name again!\n");
+        else if(!checkValidName(_pname))
+            printf("\nYour name is invalid. Please enter your name again!\n");
         else
             break;
     }

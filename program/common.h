@@ -20,7 +20,8 @@
 
 
 #define EXIT_MESSAGE            ":*@#!$^q"
-#define BUFFER_SIZE             255
+#define BUFFER_SIZE             50
+#define NAME_SIZE               50
 #define SOCKET_PORT             5000
 
 int sendMess(int fd, char *buff);
