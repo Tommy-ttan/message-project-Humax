@@ -9,6 +9,7 @@ void *ClientHandle(void *arg_client_fd)
     int n;
     int client_fd = *((int *)arg_client_fd);
     char _recv_buf[BUFFER_SIZE];
+    printf("client fd: %d\n", client_fd);
     while (1)
     {
 		memset(_recv_buf, 0, BUFFER_SIZE);
@@ -18,11 +19,11 @@ void *ClientHandle(void *arg_client_fd)
 			perror("Error while receiving data from client");
 			exit(1);
 		}
-		else if(n == 0 || !strcmp(_recv_buf, EXIT_MESSAGE))
+		//else if(n == 0 || !strcmp(_recv_buf, EXIT_MESSAGE))
+        else if(n == 0)
 		{
 			Server_removeList(gclient_list, client_fd);
-            printf("client fd %d has letf\n", client_fd);
-            break;
+            printf("Remove client fd: %d\n", client_fd);
 		}
 		else
 		{
@@ -48,8 +49,10 @@ int main()
     {
         //accpet connection from client
         new_client_fd = Server_acceptConnect(glisten_fd, gclient_list);
-        printf("Accecpt new client fd %d\n", new_client_fd);
+        printf("Accecpt new client fd: %d\n", new_client_fd);
         //create new thread for each client
+        //pthread_t *clien_thread_attr = Server_readLastThreadAttr(gclient_list);
+        //pthread_create(clien_thread_attr, NULL, ClientHandle, NULL);
         pthread_create(&tid, NULL, ClientHandle, (void *)&new_client_fd);
     }
 

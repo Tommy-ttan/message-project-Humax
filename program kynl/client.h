@@ -3,18 +3,19 @@
 
 #include "common.h"
 
-#define ROLE_LISTENER   1
-#define ROLE_TALKER     2
-#define ROLE_BOTH       3
-
 struct client 
 {
     int fd;
     int role;
+<<<<<<< HEAD:programKynl/client.h
     char name[100];
     int connected;
+=======
+>>>>>>> parent of a269e9a (fix bug and add user name):program kynl/client.h
     char send_buff[BUFFER_SIZE];
     char recv_buff[BUFFER_SIZE];
+    int (*pfunc_send)(int, char *);
+    int (*pfunc_recv)(int, char *);
 };
 
 extern char input_buf[BUFFER_SIZE];
@@ -26,7 +27,6 @@ void Client_processInput(char ch, void (*pfunc_process)(), void (*pfunc_exit)())
 
 int Client_connect(void);
 int Client_chooseRole(void);
-void Client_getUserName(char *_pname);
 
 
 #endif
