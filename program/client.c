@@ -89,7 +89,7 @@ void Client_printMessage(char *msg)
 int Client_checkValidInputMessage(char *msg)
 {
     for (int i = 0; i < strlen(msg); i++)
-        if (isalpha(msg[i]) || isdigit(msg[i]))
+        if (isprint(msg[i]) && msg[i] != ' ' && msg[i] != '\t')
             return 1;
     return 0;
 }
