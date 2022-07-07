@@ -39,7 +39,7 @@ char getch(void)
 void Client_printMessageInLine(int lines, char *msg)
 {
     printf("\r"        // Moves cursor to beginning of line.
-           "\033[1B"   // Move cursor up 1 lines.
+           "\033[1B"   // Move cursor down 1 lines.
            "\033[s"    // Save cursor position.
            "\033[%dA"  // Move cursor up d lines.
            "\x1b[2K"   // Clear entire line
@@ -51,6 +51,7 @@ void Client_printMessageInLine(int lines, char *msg)
            lines,
            msg,
            strlen(input_buf) + 9);
+    fflush(stdin);
     fflush(stdout);
 }
 
@@ -72,7 +73,7 @@ void Client_showBuffer()
  */
 void Client_printMessage(char *msg)
 {
-    printf("\n\n");
+    printf("\n");
     Client_printMessageInLine(4, msg);
     Client_printMessageInLine(3, "_____________________");
     Client_printMessageInLine(2, "Enter ':q' to quit");
@@ -176,7 +177,7 @@ int Client_connect()
             _ret_val = connect(_fd_socket, (struct sockaddr *)&_saddr, sizeof(struct sockaddr_in));
             if (_ret_val == -1)
             {
-                printf("the IP address %s is incorrect, please try again!\n", _buffer_IP);
+                printf("The IP address %s is incorrect or server is not running. Please try again!\n", _buffer_IP);
             }
             else
             {
@@ -204,7 +205,7 @@ int Client_chooseRole(void)
     {
         printf("1. Listener\n2. Talker\n3. Both\n");
         printf("Enter your choice: ");
-        fgets(_buf, sizeof(_buf), stdin);
+        fgets(_buf, BUFFER_SIZE, stdin);
         fflush(stdin);
         if (strlen(_buf) > 2 || _buf[0] < '1' || _buf[0] > '3')
             printf("\nYour choice is invalid. Please choose again!\n");
@@ -216,12 +217,14 @@ int Client_chooseRole(void)
 
 void Client_getUserName(char *_pname)
 {
-    printf("\nEnter your name: ");
     while (1)
     {
-        fgets(_pname, sizeof(_pname), stdin);
-        _pname[strlen(_pname) - 1] = '\0';
+        printf("\nEnter your name: ");
+        fgets(_pname, 100, stdin);
+        if(strlen(_pname) > 0)
+            _pname[strlen(_pname) - 1] = '\0';
         fflush(stdin);
+        fflush(stdout);
         if (strlen(_pname) < 2)
             printf("\nYour name is too short. Please enter your name again!\n");
         else if (strlen(_pname) > 20)

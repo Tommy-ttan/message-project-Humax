@@ -13,10 +13,10 @@
 #include <termios.h>
 #include <pthread.h>
 #include <sys/wait.h>
-#include </usr/include/x86_64-linux-gnu/sys/select.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h> 
+#include <signal.h>
 
 
 #define EXIT_MESSAGE            ":*@#!$^q"

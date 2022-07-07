@@ -2,12 +2,11 @@
 #include "common.h"
 
 struct client gclient;
-pthread_t gthreads_recv;
-int gthread_recv_id;
+pthread_t gthread_id = 0;
 
 void sendMessageToServer()
 {
-	char _buf[BUFFER_SIZE + 20];
+	char _buf[BUFFER_SIZE + 101];
 	sprintf(_buf, "%s: %s", gclient.name, input_buf);
 
 	//send message when user is talker or both
@@ -22,13 +21,21 @@ void sendMessageToServer()
 }
 void exitProgram()
 {
-	char _buf[BUFFER_SIZE];
-	sprintf(_buf, "[Message center]: %s has letf the room!", gclient.name);
-	sendMess(gclient.fd, _buf);
-	//exit message
-	sendMess(gclient.fd, EXIT_MESSAGE);
+	//kill recv thread
+	if(gthread_id != 0)
+		pthread_cancel(gthread_id);
+	//send exit message to server
+	if(gclient.connected)
+	{
+		char _buf[BUFFER_SIZE];
+		sprintf(_buf, "[Message center]: %s letf the room!", gclient.name);
+		sendMess(gclient.fd, _buf);
+		sendMess(gclient.fd, EXIT_MESSAGE);
+		close(gclient.fd);
+	}
 	//exit program
 	printf("\nQuit program\n");
+	printf("\n\r");
 	exit(0);
 }
 void *RecvMessageHandle(void *arg_client_fd)
@@ -45,7 +52,7 @@ void *RecvMessageHandle(void *arg_client_fd)
 		}
 		else if(n == 0)
 		{
-			printf("Server is closed!");
+			printf("\nServer is closed!");
 			exitProgram();
 		}
 		else
@@ -56,15 +63,23 @@ void *RecvMessageHandle(void *arg_client_fd)
 	}
 	return NULL;
 }
+void ctr_C_handler(sig_t s)
+{
+	exitProgram();
+}
 
 int main()
 {
-	printf("\n--- HUMAX CHAT APP ----\n");
+	//hanlde ctrl-C signal
+	signal (SIGINT, ctr_C_handler);
 	//connect to server
+	printf("\n--- HUMAX CHAT APP ----\n");
+	gclient.connected = 0;
 	gclient.fd = Client_connect();
 	if(gclient.fd < 0)
 		exit(1);
-	
+	gclient.connected = 1;
+
 	//enter user's name
 	Client_getUserName(gclient.name);
 
@@ -75,12 +90,12 @@ int main()
 	printf("\n---- WELCOME TO HUMAX CHAT ROOM ----\n\n\n\n");
 	Client_printMessage("");
 	char _buf[BUFFER_SIZE + 20];
-	sprintf(_buf, "[Message center]: %s has joined the room!", gclient.name);
+	sprintf(_buf, "[Message center]: %s joined the room!", gclient.name);
 	sendMess(gclient.fd, _buf);
 
 	//create receive thread
 	if(gclient.role != ROLE_TALKER)
-		gthread_recv_id = pthread_create(&gthreads_recv, NULL, RecvMessageHandle, (void *)&gclient.fd);
+		pthread_create(&gthread_id, NULL, RecvMessageHandle, (void *)&gclient.fd);
 
 	// insert input message
 	while (1)
